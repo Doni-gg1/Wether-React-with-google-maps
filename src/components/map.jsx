@@ -66,6 +66,7 @@ const option = {
 
 export default function Map({ getWeather, lat, lng, setLat, setLng }) {
   const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
   const center = {
@@ -73,14 +74,13 @@ export default function Map({ getWeather, lat, lng, setLat, setLng }) {
     lng: lng,
   };
   
-  // console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
 
   if (loadError) return "Error";
   if (!isLoaded) return "Loading...";
 
   return (
     <div>
-      <Search />
+      <Search getWeather={getWeather}/>
 
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
@@ -97,7 +97,7 @@ export default function Map({ getWeather, lat, lng, setLat, setLng }) {
   );
 }
 
-function Search() {
+function Search({ getWeather }) {
   const {
     ready,
     value,
@@ -117,8 +117,14 @@ function Search() {
   return (
     <div className="search">
       <Combobox
-        onSelect={(address) => {
-          console.log(address);
+        onSelect={ async (address) => {
+          try {
+            const result = await getGeocode({address});
+            const {lat, lng} = await getLatLng(result[0])
+            getWeather(lat, lng)
+          } catch (error) {
+            console.log(error)
+          }
         }}
       >
         <ComboboxInput
@@ -132,8 +138,12 @@ function Search() {
 
         <ComboboxPopover>
           {
-          // status == "OK" ?
-          // data.map(({id, description}) => console.log(id)) : null 
+          status == "OK" &&
+          data.map(({id, description}) => {
+            return (
+                data.map(({id, description}) => <ComboboxOption id={id} value={description} />)
+            )
+          })
           }
         </ComboboxPopover>
       </Combobox>
