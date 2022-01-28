@@ -1,37 +1,3 @@
-// import axios from 'axios';
-// import React from 'react';
-// import { GoogleMap, withScriptjs, withGoogleMap } from 'react-google-maps';
-
-// function MapFromGoogle({ getWeather }) {
-
-//     return (
-//          <GoogleMap
-//          onClick={ev => {
-//           getWeather(ev.latLng.lat(), ev.latLng.lng())
-//           }}
-//             defaultZoom={2}
-//             defaultCenter={{ lat: 22.3193, lng: 114.1694 }}
-//         />
-//     )
-// }
-
-// const WrappedMap = withScriptjs(withGoogleMap(MapFromGoogle));
-
-// function Map({ getWeather }) {
-//   return <div style={{width: '100%', height: '300px'}}>
-//         <WrappedMap
-//             // props={props}
-//             getWeather={getWeather}
-//             googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places`}
-//             loadingElement={<div style={{ height: `100%` }} />}
-//             containerElement={<div style={{ height: `400px` }} />}
-//             mapElement={<div style={{ height: `100%` }} />}
-//         />
-//   </div>;
-// }
-
-// export default Map;
-
 import React from "react";
 import {
   GoogleMap,
@@ -66,21 +32,20 @@ const option = {
 
 export default function Map({ getWeather, lat, lng, setLat, setLng }) {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_API_KEY,
     libraries,
   });
   const center = {
     lat: lat,
     lng: lng,
   };
-  
 
   if (loadError) return "Error";
   if (!isLoaded) return "Loading...";
 
   return (
     <div>
-      <Search getWeather={getWeather}/>
+      <Search getWeather={getWeather} setLat={setLat} setLng={setLng} />
 
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
@@ -88,8 +53,8 @@ export default function Map({ getWeather, lat, lng, setLat, setLng }) {
         center={center}
         option={option}
         onClick={(event) => {
-          setLat(event.latLng.lat())
-          setLng(event.latLng.lng())
+          setLat(event.latLng.lat());
+          setLng(event.latLng.lng());
           getWeather(event.latLng.lat(), event.latLng.lng());
         }}
       />
@@ -97,7 +62,7 @@ export default function Map({ getWeather, lat, lng, setLat, setLng }) {
   );
 }
 
-function Search({ getWeather }) {
+function Search({ getWeather, setLat, setLng }) {
   const {
     ready,
     value,
@@ -117,13 +82,15 @@ function Search({ getWeather }) {
   return (
     <div className="search">
       <Combobox
-        onSelect={ async (address) => {
+        onSelect={async (address) => {
           try {
-            const result = await getGeocode({address});
-            const {lat, lng} = await getLatLng(result[0])
-            getWeather(lat, lng)
+            const result = await getGeocode({ address });
+            const { lat, lng } = await getLatLng(result[0]);
+            setLat(lat)
+            setLng(lng)
+            getWeather(lat, lng);
           } catch (error) {
-            console.log(error)
+            console.log(error);
           }
         }}
       >
@@ -137,14 +104,12 @@ function Search({ getWeather }) {
         />
 
         <ComboboxPopover>
-          {
-          status == "OK" &&
-          data.map(({id, description}) => {
-            return (
-                data.map(({id, description}) => <ComboboxOption id={id} value={description} />)
-            )
-          })
-          }
+          {status == "OK" &&
+            data.map(({ id, description }) => {
+              return data.map(({ id, description }) => (
+                <ComboboxOption id={id} value={description} />
+              ));
+            })}
         </ComboboxPopover>
       </Combobox>
     </div>

@@ -15,40 +15,19 @@ function App() {
   const [lat, setLat] = useState(42.882004)
   const [lng, setLng] = useState(74.582748)
 
-
-  // const API_KEY = process.env.REACT_APP_API_KEY
-  // console.log(API_KEY)
-
-  const getWeatherInput = async () => {
-    const { data } = await axios.get(
-      `${URL}?q=${nameCountry}&appid=${apiKey}`
-    );
-    setDataFromMap({})
-    setDataFromInput(data);
-  };
-
   const getWeatherMap = async (lat, lng) => {
-    try{
+    try {
       const { data } = await axios.get(`${URL}?lat=${lat}&lon=${lng}&appid=${apiKey}`)
       setDataFromInput({});
       setDataFromMap(data)
-      
-    }catch{
+    } catch {
       console.log("Error with request on Map")
     }
   }
 
-
   return (
     <div className="App">
       <div className='cont'>
-        <Form URL={URL}
-          apiKey={apiKey}
-          setDataFromInput={setDataFromInput}
-          getWeather={getWeatherInput}
-          nameCountry={nameCountry}
-          setNameCountry={setNameCountry}
-        />
         <Map url={URL}
           apiKey={apiKey}
           setDataFromMap={setDataFromMap}
@@ -58,16 +37,18 @@ function App() {
           setLat={setLat}
           setLng={setLng}
         />
-        {Object.keys(dataFromInput).length ?
-          <Weather
-            data={dataFromInput}
-          />
-          : Object.keys(dataFromMap).length ?
+        <div class="weather">
+          {Object.keys(dataFromInput).length ?
             <Weather
-              data={dataFromMap}
+              data={dataFromInput}
             />
-            : null
-        }
+            : Object.keys(dataFromMap).length ?
+              <Weather
+                data={dataFromMap}
+              />
+              : null
+          }
+        </div>
       </div>
     </div>
   );
