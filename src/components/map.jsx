@@ -66,7 +66,9 @@ export default function Map({ getWeather, lat, lng, setLat, setLng }) {
           onLoad={onMapLoad}
       >
           <Marker position={markers} onClick={ (e) => {
+            // document.querySelector('.wrapper_weatherItem').setAttribute("hidden", false)
               document.querySelector('.weatherItem').classList.toggle('notActive')
+
           } }
           />
       </GoogleMap>

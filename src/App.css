@@ -24,23 +24,7 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* .container{
-  max-width: 1000px;
-  margin: 0 auto;
-} */
 
 .form{
   position: absolute;
@@ -65,6 +49,8 @@
 .notActiveInput{
   display: none;
 }
+
+
 
 
 .search-icon {
@@ -92,10 +78,21 @@
   transition-duration: 1s;
 }
 
+@media (max-width: 1300px) { 
+  .activeSearch-icon, .search-icon{
+    top: 20%;
+  }
+  
+}
+@media (max-width: 570px) {
+  .search {
+    top: 20%;
+  }
+}
+
 .search input {
   padding: 10px 20px;
   border-radius: 20px;
-  width: 200%;
   transition: 1s;
 }
 
@@ -108,7 +105,7 @@
   padding: 20px;
   text-align: left;
   position: absolute;
-  top: 60%;
+  top: 50%;
   background-color: white;
   box-shadow: 2px 5px 16px 0px #0B325E, -10px 6px 12px 5px rgba(0,0,0,0.42);
   transition: all ease 1s;
@@ -146,4 +143,15 @@
   display: flex;
   justify-content: center;
   transition: 0.5s;
+}
+
+.wrapper_weatherItem{
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  opacity: 0.5;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
 }
