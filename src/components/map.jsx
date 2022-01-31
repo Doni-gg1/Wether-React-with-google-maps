@@ -1,23 +1,7 @@
-import React from "react";
-import {
-  GoogleMap,
-  useLoadScript,
-  Marker,
-  InfoWindow,
-} from "@react-google-maps/api";
-
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from "@reach/combobox";
-
+import React, {useCallback, useRef, useState} from "react";
+import { GoogleMap, useLoadScript, Marker, InfoWindow, } from "@react-google-maps/api";
+import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
+import {Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
 const libraries = ["places"];
@@ -27,12 +11,12 @@ const mapContainerStyle = {
 };
 
 const option = {
-  disableDefaultUI: true,
+    disableDefaultUI: false,
 };
 
 export default function Map({ getWeather, lat, lng, setLat, setLng }) {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
   const center = {
@@ -40,29 +24,57 @@ export default function Map({ getWeather, lat, lng, setLat, setLng }) {
     lng: lng,
   };
 
-  if (loadError) return "Error";
+  const searchBtn = () => {
+      document.querySelector('.search').classList.toggle('notActiveInput')
+      document.querySelector('.search-icon').classList.toggle('activeSearch-icon')
+      document.querySelector('.search input').focus()
+  }
+
+  const mapRef = useRef();
+  const onMapLoad = React.useCallback((map) => {
+      mapRef.current = map;
+  }, [])
+
+  const panTo = useCallback(({lat,lng}) => {
+    mapRef.current.panTo({lat, lng});
+    mapRef.current.setZoom(14)
+  }, [])
+
+    const [markers, setMarkers] = useState({})
+
+    if (loadError) return "Error";
   if (!isLoaded) return "Loading...";
+
 
   return (
     <div>
-      <Search getWeather={getWeather} setLat={setLat} setLng={setLng} />
+      <Search setMarkers={setMarkers} panTo={panTo} getWeather={getWeather} setLat={setLat} setLng={setLng} />
+      <button style={{transition: '0.5s'}} className="searchBtn search-icon" onClick={searchBtn}>
 
+      </button>
       <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={10}
-        center={center}
-        option={option}
-        onClick={(event) => {
-          setLat(event.latLng.lat());
-          setLng(event.latLng.lng());
-          getWeather(event.latLng.lat(), event.latLng.lng());
+          mapContainerStyle={mapContainerStyle}
+          zoom={3}
+          center={center}
+          option={option}
+          onClick={(event) => {
+            setLat(event.latLng.lat());
+            setLng(event.latLng.lng());
+            getWeather(event.latLng.lat(), event.latLng.lng());
+            setMarkers({lat: event.latLng.lat(), lng: event.latLng.lng()})
         }}
-      />
+          onLoad={onMapLoad}
+      >
+          <Marker position={markers} onClick={ (e) => {
+              document.querySelector('.weatherItem').classList.toggle('notActive')
+          } }
+          />
+      </GoogleMap>
     </div>
   );
 }
 
-function Search({ getWeather, setLat, setLng }) {
+function Search({ getWeather, setLat, setLng, panTo, setMarkers }) {
   const {
     ready,
     value,
@@ -79,22 +91,27 @@ function Search({ getWeather, setLat, setLng }) {
     },
   });
 
-  return (
-    <div className="search">
+
+    return (
+    <div className="search notActiveInput">
       <Combobox
         onSelect={async (address) => {
+          setValue('')
           try {
             const result = await getGeocode({ address });
             const { lat, lng } = await getLatLng(result[0]);
-            setLat(lat)
-            setLng(lng)
+            setLat(lat);
+            setLng(lng);
             getWeather(lat, lng);
+            panTo({lat, lng});
+            setMarkers({ lat, lng})
           } catch (error) {
             console.log(error);
           }
         }}
       >
         <ComboboxInput
+            style={{transition: "0.5s"}}
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
@@ -107,7 +124,7 @@ function Search({ getWeather, setLat, setLng }) {
           {status == "OK" &&
             data.map(({ id, description }) => {
               return data.map(({ id, description }) => (
-                <ComboboxOption id={id} value={description} />
+                <ComboboxOption key={id} value={description} />
               ));
             })}
         </ComboboxPopover>

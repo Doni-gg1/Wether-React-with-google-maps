@@ -11,7 +11,7 @@ function Weather({ data }) {
     console.log(data);
   }, [data]);
   return (
-    <div className="weatherItem" style={{ marginTop: "100px" }}>
+    <div className="notActive weatherItem">
       <div>
         <h1>{data.name}</h1>
         <p>

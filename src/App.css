@@ -50,36 +50,100 @@
 }
 
 .search{
+  transition: 1s;
   position: absolute;
-  left: 45%;
-  top: 10%;
+  left: 40%;
+  top: 1%;
   z-index: 11;
 }
 
+.active{
+  transition: all ease 3s;
+  display: block;
+}
+
+.notActiveInput{
+  display: none;
+}
+
+
+.search-icon {
+  z-index: 11;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 15%;
+  top: 5px;
+  background: url("./assets/images/premium-icon-global-search-3252873.png");
+  background-size: 100%;
+  border: none;
+  transition-duration: 1s;
+}
+.activeSearch-icon {
+  z-index: 11;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 15%;
+  top: 5px;
+  background: url("./assets/images/activeSearch.png");
+  background-size: 100%;
+  border: none;
+  transition-duration: 1s;
+}
+
+.search input {
+  padding: 10px 20px;
+  border-radius: 20px;
+  width: 200%;
+  transition: 1s;
+}
+
 .weatherItem {
+  color: black;
   width: 40%;
-  /* height: 300px; */
+   height: 250px;
   border: 1px solid black;
   border-radius: 10px;
   padding: 20px;
   text-align: left;
+  position: absolute;
+  top: 60%;
+  background-color: white;
+  box-shadow: 2px 5px 16px 0px #0B325E, -10px 6px 12px 5px rgba(0,0,0,0.42);
+  transition: all ease 1s;
+  overflow: hidden;
+}
+
+.notActive{
+  transition: all ease 1s;
+  width: 0;
+  height: 0;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  color: white;
 }
 
 .weatherItem h1 {
   line-height: 20px;
+  transition: 0.5s;
 }
 
 .weatherItem h2 {
   font-size: 70px;
+  /*transition: 0.5s;*/
+
 }
 
 .temp {
   display: flex;
   justify-content: space-around;
+  transition: 0.5s;
 
 }
 .weather {
-  padding: 20px;
   display: flex;
   justify-content: center;
+  transition: 0.5s;
 }
