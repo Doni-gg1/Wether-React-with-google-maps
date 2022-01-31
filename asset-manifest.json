@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/Wether-React-with-google-maps/static/css/main.1c5da9e6.css",
+    "main.js": "/Wether-React-with-google-maps/static/js/main.2b27f85a.js",
+    "static/js/787.13d76ca7.chunk.js": "/Wether-React-with-google-maps/static/js/787.13d76ca7.chunk.js",
+    "static/media/Clear.png": "/Wether-React-with-google-maps/static/media/Clear.83a63a10b359b98634a3.png",
+    "static/media/premium-icon-global-search-3252873.png": "/Wether-React-with-google-maps/static/media/premium-icon-global-search-3252873.bb898c8f190b3a178187.png",
+    "static/media/activeSearch.png": "/Wether-React-with-google-maps/static/media/activeSearch.817290cf41e6be2c396c.png",
+    "index.html": "/Wether-React-with-google-maps/index.html",
+    "main.1c5da9e6.css.map": "/Wether-React-with-google-maps/static/css/main.1c5da9e6.css.map",
+    "main.2b27f85a.js.map": "/Wether-React-with-google-maps/static/js/main.2b27f85a.js.map",
+    "787.13d76ca7.chunk.js.map": "/Wether-React-with-google-maps/static/js/787.13d76ca7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1c5da9e6.css",
+    "static/js/main.2b27f85a.js"
+  ]
+}
